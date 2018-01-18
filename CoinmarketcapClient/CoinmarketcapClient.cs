@@ -11,7 +11,7 @@ namespace NoobsMuc.Coinmarketcap.Client
 
         List<string> ICoinmarketcapClient.GetConvertCurrencyList()
         {
-            return new List<string>{"AUD", "BRL", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "IDR", "INR", "JPY", "KRW", "MXN", "RUB"};
+            return new List<string> { "AUD", "BRL", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "IDR", "INR", "JPY", "KRW", "MXN", "RUB", "ILS" };
         }
 
         Currency ICoinmarketcapClient.GetCurrencyById(string id)
@@ -23,7 +23,7 @@ namespace NoobsMuc.Coinmarketcap.Client
         {
             return CurrencyById(id, convertCurrency);
         }
-        
+
         private Currency CurrencyById(string id, string convertCurrency)
         {
             string path = "/" + id;
@@ -32,7 +32,7 @@ namespace NoobsMuc.Coinmarketcap.Client
 
             var client = new WebApiClient(Url);
             var result = client.MakeRequest(Path + path, Method.GET, convertCurrency);
-            
+
             return result.First();
         }
 
@@ -58,15 +58,15 @@ namespace NoobsMuc.Coinmarketcap.Client
 
         private List<Currency> Currencies(int limit, string convertCurrency)
         {
-            string seperator = string.Empty;
+            const string k_Separator = "&";
             string path = "?";
-
             path += "limit=" + limit;
-            seperator = "&";
-            
-            if(!string.IsNullOrEmpty(convertCurrency))
-                path += seperator +"convert=" + convertCurrency;
-            
+
+            if (!string.IsNullOrEmpty(convertCurrency))
+            {
+                path += k_Separator + "convert=" + convertCurrency;
+            }
+
             var client = new WebApiClient(Url);
             var result = client.MakeRequest(Path + path, Method.GET, convertCurrency);
             return result;
