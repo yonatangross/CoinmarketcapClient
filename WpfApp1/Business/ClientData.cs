@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace WpfApp1.Logic
+﻿namespace WpfApp1.Business
 {
+    using System.Collections.Generic;
+    using Coinmarketcap.Client;
 
     public class ClientData
     {

@@ -1,9 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Input;
-
-namespace WpfApp1
+﻿namespace WpfApp1.UI
 {
-    using WpfApp1.Logic;
+    using System.Windows;
+    using System.Windows.Input;
+    using WpfApp1.Business;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,15 +21,17 @@ namespace WpfApp1
 
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if(e.ChangedButton == MouseButton.Left)
+            {
                 this.DragMove();
+            }
         }
 
         private void populateCryptoGrid()
         {
             if (this.ListBoxCurrencies.SelectedItem != null)
             {
-                string newConvertCurrency = ListBoxCurrencies.SelectedItem.ToString();
+                string newConvertCurrency = this.ListBoxCurrencies.SelectedItem.ToString();
                 if (newConvertCurrency != this.r_ClientData.convertCurrency)
                 {
                     this.r_ClientData.CryptCurrenciesList = this.r_ClientData.client.GetCurrencies(100, newConvertCurrency);
@@ -43,6 +44,5 @@ namespace WpfApp1
         {
             this.populateCryptoGrid();
         }
-
     }
 }
