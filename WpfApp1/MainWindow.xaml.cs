@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfApp1
 {
@@ -28,9 +16,14 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-
             this.ListBoxCurrencies.ItemsSource = this.r_ClientData.client.GetConvertCurrencyList();
+            this.MainWindow1.MouseDown += this.MainWindow_MouseDown;
+        }
 
+        private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
 
         private void populateCryptoGrid()
@@ -46,9 +39,10 @@ namespace WpfApp1
             }
         }
 
-        private void ButtonPopulateGrid_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonPopulateGrid_Click(object sender, RoutedEventArgs e)
         {
             this.populateCryptoGrid();
         }
+
     }
 }
