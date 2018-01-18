@@ -33,6 +33,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -95,13 +99,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoinmarketcapClient\CoinmarketcapClient.csproj">
-      <Project>{A7060A69-55B4-42CB-A494-FBD592C57FA6}</Project>
-      <Name>CoinmarketcapClient</Name>
-    </ProjectReference>
+    <Folder Include="UI\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\" />
+    <ProjectReference Include="..\CoinmarketcapClient\CoinmarketcapClient.csproj">
+      <Project>{a7060a69-55b4-42cb-a494-fbd592c57fa6}</Project>
+      <Name>CoinmarketcapClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

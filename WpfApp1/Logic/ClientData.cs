@@ -2,7 +2,6 @@
 
 namespace WpfApp1.Logic
 {
-    using NoobsMuc.Coinmarketcap.Client;
 
     public class ClientData
     {

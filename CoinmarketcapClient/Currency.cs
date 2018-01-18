@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NoobsMuc.Coinmarketcap.Client
+namespace Coinmarketcap.Client
 {
     public class Currency
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using RestSharp.Portable;
 
-namespace NoobsMuc.Coinmarketcap.Client
+namespace Coinmarketcap.Client
 {
     public class CoinmarketcapClient : ICoinmarketcapClient
     {

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using RestSharp.Portable;
 using RestSharp.Portable.HttpClient;
 
-namespace NoobsMuc.Coinmarketcap.Client
+namespace Coinmarketcap.Client
 {
     public class WebApiClient
     {

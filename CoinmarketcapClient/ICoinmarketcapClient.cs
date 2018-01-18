@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NoobsMuc.Coinmarketcap.Client
+namespace Coinmarketcap.Client
 {
     public interface ICoinmarketcapClient
     {
