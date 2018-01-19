@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Coinmarketcap.Client
 {
@@ -10,6 +11,7 @@ namespace Coinmarketcap.Client
         Currency GetCurrencyById(string id, string convertCurrency);
 
         IEnumerable<Currency> GetCurrencies();
+        Task<IEnumerable<Currency>> GetCurrencies2();
         IEnumerable<Currency> GetCurrencies(string convertCurrency);
         IEnumerable<Currency> GetCurrencies(int limit);
         IEnumerable<Currency> GetCurrencies(int limit, string convertCurrency);

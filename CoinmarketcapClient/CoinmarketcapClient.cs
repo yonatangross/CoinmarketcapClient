@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RestSharp.Portable;
 
 namespace Coinmarketcap.Client
@@ -35,6 +36,12 @@ namespace Coinmarketcap.Client
 
             return result.First();
         }
+
+        public async Task<IEnumerable<Currency>> GetCurrencies2()
+        {
+            return Currencies(-1, string.Empty);
+        }
+
 
         IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies()
         {

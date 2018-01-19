@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/noobsmuc/CoinmarketcapClient</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <AssemblyName>NoobsMuc.Coinmarketcap.Client</AssemblyName>
-    <RootNamespace>NoobsMuc.Coinmarketcap.Client</RootNamespace>
+    <AssemblyName>Coinmarketcap.Client</AssemblyName>
+    <RootNamespace>Coinmarketcap.Client</RootNamespace>
     <PackageReleaseNotes>Support convert currency values</PackageReleaseNotes>
     <PackageIconUrl>https://secure.gravatar.com/avatar/eaa2ca6694b26502955aea7afc3a757d</PackageIconUrl>
   </PropertyGroup>

@@ -1,7 +1,13 @@
 ﻿namespace WpfApp1.UI
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Documents;
     using System.Windows.Input;
+
+    using Coinmarketcap.Client;
+
     using WpfApp1.Business;
 
     /// <summary>
@@ -21,28 +27,33 @@
 
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();
             }
         }
 
-        private void populateCryptoGrid()
+        private void populateCryptoGrid(Task<List<Currency>> i_CurrenciesTask)
+        {
+            List<Currency> currencies = i_CurrenciesTask.Result;
+            this.DataGridCurrencies.ItemsSource = currencies;
+        }
+
+        private void ButtonPopulateGrid_Click(object sender, RoutedEventArgs e)
         {
             if (this.ListBoxCurrencies.SelectedItem != null)
             {
                 string newConvertCurrency = this.ListBoxCurrencies.SelectedItem.ToString();
                 if (newConvertCurrency != this.r_ClientData.convertCurrency)
                 {
+                    Task<IEnumerable<Currency>> currenciesTask = this.r_ClientData.client.GetCurrencies2(100, newConvertCurrency);
+                    currenciesTask.ContinueWith(
+                        this.populateCryptoGrid,
+                        TaskScheduler.FromCurrentSynchronizationContext());
                     this.r_ClientData.CryptCurrenciesList = this.r_ClientData.client.GetCurrencies(100, newConvertCurrency);
-                    this.DataGridCurrencies.ItemsSource = this.r_ClientData.CryptCurrenciesList;
+                    this.populateCryptoGrid();
                 }
             }
-        }
-
-        private void ButtonPopulateGrid_Click(object sender, RoutedEventArgs e)
-        {
-            this.populateCryptoGrid();
         }
     }
 }
