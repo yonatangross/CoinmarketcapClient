@@ -33,12 +33,6 @@
             }
         }
 
-        private void populateCryptoGrid(Task<List<Currency>> i_CurrenciesTask)
-        {
-            List<Currency> currencies = i_CurrenciesTask.Result;
-            this.DataGridCurrencies.ItemsSource = currencies;
-        }
-
         private void ButtonPopulateGrid_Click(object sender, RoutedEventArgs e)
         {
             if (this.ListBoxCurrencies.SelectedItem != null)
@@ -48,10 +42,12 @@
                 {
                     Task<IEnumerable<Currency>> currenciesTask = this.r_ClientData.client.GetCurrencies2(100, newConvertCurrency);
                     currenciesTask.ContinueWith(
-                        this.populateCryptoGrid,
+                        i_CurrenciesTask => 
+                            {
+                                IEnumerable<Currency> currencies = i_CurrenciesTask.Result;
+                                DataGridCurrencies.ItemsSource = currencies;
+                            },
                         TaskScheduler.FromCurrentSynchronizationContext());
-                    this.r_ClientData.CryptCurrenciesList = this.r_ClientData.client.GetCurrencies(100, newConvertCurrency);
-                    this.populateCryptoGrid();
                 }
             }
         }

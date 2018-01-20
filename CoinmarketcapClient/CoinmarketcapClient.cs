@@ -5,78 +5,147 @@ using RestSharp.Portable;
 
 namespace Coinmarketcap.Client
 {
+    using System;
+
     public class CoinmarketcapClient : ICoinmarketcapClient
     {
-        private const string Url = "http://api.coinmarketcap.com";
-        private const string Path = "/v1/ticker";
+        private const string k_Separator = "&";
+        private const string k_Url = "http://api.coinmarketcap.com";
+        private const string k_Path = "/v1/ticker";
+
+        private const string k_ApiVersion = "/v1/";
 
         List<string> ICoinmarketcapClient.GetConvertCurrencyList()
         {
             return new List<string> { "ILS", "EUR", "AUD", "BRL", "CAD", "CHF", "CNY", "GBP", "HKD", "IDR", "INR", "JPY", "KRW", "MXN", "RUB", };
         }
 
-        Currency ICoinmarketcapClient.GetCurrencyById(string id)
+        Currency ICoinmarketcapClient.GetCurrencyById(string i_Id)
         {
-            return CurrencyById(id, string.Empty);
+            return currencyById(i_Id, string.Empty);
         }
 
-        Currency ICoinmarketcapClient.GetCurrencyById(string id, string convertCurrency)
+        Currency ICoinmarketcapClient.GetCurrencyById(string i_Id, string i_ConvertCurrency)
         {
-            return CurrencyById(id, convertCurrency);
+            return currencyById(i_Id, i_ConvertCurrency);
         }
 
-        private Currency CurrencyById(string id, string convertCurrency)
+        private static Currency currencyById(string i_Id, string i_ConvertCurrency)
         {
-            string path = "/" + id;
-            if (!string.IsNullOrEmpty(convertCurrency))
-                path += "/?convert=" + convertCurrency;
+            string path = "/" + i_Id;
+            if (!string.IsNullOrEmpty(i_ConvertCurrency))
+            {
+                path += "/?convert=" + i_ConvertCurrency;
+            }
 
-            var client = new WebApiClient(Url);
-            var result = client.MakeRequest(Path + path, Method.GET, convertCurrency);
+            WebApiClient client = new WebApiClient(k_Url);
+            List<Currency> result = client.MakeRequest(k_Path + path, Method.GET, i_ConvertCurrency);
 
             return result.First();
         }
 
-        public async Task<IEnumerable<Currency>> GetCurrencies2()
+        private static async Task<List<Currency>> asyncCurrencies(int i_Limit, string i_ConvertCurrency)
         {
-            return Currencies(-1, string.Empty);
-        }
+            string path = "?";
+            path += "limit=" + i_Limit;
 
+            if (!string.IsNullOrEmpty(i_ConvertCurrency))
+            {
+                path += k_Separator + "convert=" + i_ConvertCurrency;
+            }
+
+            WebApiClient client = new WebApiClient(k_Url);
+            List<Currency> result2 = client.MakeHttpRequest(k_Path + path, i_ConvertCurrency);
+            return result2;
+        }
 
         IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies()
         {
-            return Currencies(-1, string.Empty);
+            return this.currencies(-1, string.Empty);
         }
 
-        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(string convertCurrency)
+        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(string i_ConvertCurrency)
         {
-            return Currencies(-1, convertCurrency);
+            return this.currencies(-1, i_ConvertCurrency);
         }
 
-        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(int limit)
+        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(int i_Limit)
         {
-            return Currencies(limit, string.Empty);
+            return this.currencies(i_Limit, string.Empty);
         }
 
-        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(int limit, string convertCurrency)
+        IEnumerable<Currency> ICoinmarketcapClient.GetCurrencies(int i_Limit, string i_ConvertCurrency)
         {
-            return Currencies(limit, convertCurrency);
+            return this.currencies(i_Limit, i_ConvertCurrency);
         }
 
-        private List<Currency> Currencies(int limit, string convertCurrency)
+        public async Task<IEnumerable<Currency>> GetCurrencies2(int i_Limit, string i_ConvertCurrency)
         {
-            const string k_Separator = "&";
+            List<Currency> currencies = await asyncCurrencies(i_Limit, i_ConvertCurrency);
+
+            return currencies;
+        }
+
+        private IEnumerable<Currency> currencies(int i_Limit, string i_ConvertCurrency)
+        {
             string path = "?";
-            path += "limit=" + limit;
+            path += "limit=" + i_Limit;
 
-            if (!string.IsNullOrEmpty(convertCurrency))
+            if (!string.IsNullOrEmpty(i_ConvertCurrency))
             {
-                path += k_Separator + "convert=" + convertCurrency;
+                path += k_Separator + "convert=" + i_ConvertCurrency;
             }
 
-            WebApiClient client = new WebApiClient(Url);
-            List<Currency> result = client.MakeRequest(Path + path, Method.GET, convertCurrency);
+            WebApiClient client = new WebApiClient(k_Url);
+            List<Currency> result = client.MakeRequest(k_Path + path, Method.GET, i_ConvertCurrency);
+
             return result;
         }
+    }
+
+    public async Task<IEnumerable<Currency>> GetSpecificCurrency(string i_CurrencyId)
+    {
+        SpecificCurrencyTickerApiMethod specificCurrencyTickerApiMethod = new SpecificCurrencyTickerApiMethod(i_CurrencyId);
+        createPath(specificCurrencyTickerApiMethod)
+
+        return currency;
+    }
+
+    internal interface IApiMethod
+    {
+        string Endpoint { get; set; }
+
+        Method RestMethod { get; set; }
+
+        Dictionary<string, string> OptionalParametersDictionary { get; set; }
+    }
+
+    public class TickerApiMethod : IApiMethod
+    {
+        public string Endpoint { get; set; } = "ticker";
+
+        public Method RestMethod { get; set; } = Method.GET;
+
+        public Dictionary<string, string> OptionalParametersDictionary { get; set; } =
+            new Dictionary<string, string> { { "start", string.Empty }, { "limit", string.Empty }, { "convert", string.Empty }, };
+    }
+
+    public class SpecificCurrencyTickerApiMethod : TickerApiMethod
+    {
+        public SpecificCurrencyTickerApiMethod(string i_CurrencyId)
+        {
+            Endpoint = Endpoint + "/" + i_CurrencyId;
+            OptionalParametersDictionary = new Dictionary<string, string> { { "convert", string.Empty } };
+        }
+    }
+
+    public class GlobalDataApiMethod : IApiMethod
+    {
+        public string Endpoint { get; set; } = "global";
+
+        public Method RestMethod { get; set; } = Method.GET;
+
+        public Dictionary<string, string> OptionalParametersDictionary { get; set; } =
+            new Dictionary<string, string> { { "convert", string.Empty }, };
     }
 }
